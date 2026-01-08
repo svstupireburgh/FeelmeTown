@@ -1,0 +1,87 @@
+// Prisma schema for FeelME Town GoDaddy SQL Database
+// Fast and type-safe database operations
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("GODADDY_DATABASE_URL")
+}
+
+// Cancelled Bookings Model
+model CancelledBooking {
+  id                   Int      @id @default(autoincrement())
+  bookingId            String   @unique @map("booking_id") @db.VarChar(255)
+  ticketNumber         String?  @map("ticket_number") @db.VarChar(50)
+  name                 String   @db.VarChar(255)
+  email                String   @db.VarChar(255)
+  phone                String?  @db.VarChar(20)
+  theaterName          String?  @map("theater_name") @db.VarChar(255)
+  bookingDate          DateTime? @map("booking_date") @db.Date
+  bookingTime          String?  @map("booking_time") @db.VarChar(50)
+  occasion             String?  @db.VarChar(255)
+  numberOfPeople       Int?     @map("number_of_people")
+  totalAmount          Decimal? @map("total_amount") @db.Decimal(10, 2)
+  cancelledAt          DateTime @default(now()) @map("cancelled_at")
+  cancellationReason   String?  @map("cancellation_reason") @db.Text
+  refundAmount         Decimal? @map("refund_amount") @db.Decimal(10, 2)
+  refundStatus         String?  @map("refund_status") @db.VarChar(50)
+  originalBookingData  Json?    @map("original_booking_data")
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("cancelled_bookings")
+  @@index([bookingId])
+  @@index([ticketNumber])
+  @@index([email])
+  @@index([bookingDate])
+  @@index([cancelledAt])
+}
+
+// Completed Bookings Model
+model CompletedBooking {
+  id                   Int      @id @default(autoincrement())
+  bookingId            String   @unique @map("booking_id") @db.VarChar(255)
+  ticketNumber         String   @unique @map("ticket_number") @db.VarChar(50)
+  name                 String   @db.VarChar(255)
+  email                String   @db.VarChar(255)
+  phone                String?  @db.VarChar(20)
+  theaterName          String?  @map("theater_name") @db.VarChar(255)
+  bookingDate          DateTime? @map("booking_date") @db.Date
+  bookingTime          String?  @map("booking_time") @db.VarChar(50)
+  occasion             String?  @db.VarChar(255)
+  numberOfPeople       Int?     @map("number_of_people")
+  totalAmount          Decimal? @map("total_amount") @db.Decimal(10, 2)
+  completedAt          DateTime @default(now()) @map("completed_at")
+  bookingStatus        String   @default("completed") @map("booking_status") @db.VarChar(50)
+  paymentStatus        String?  @map("payment_status") @db.VarChar(50)
+  originalBookingData  Json?    @map("original_booking_data")
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("completed_bookings")
+  @@index([bookingId])
+  @@index([ticketNumber])
+  @@index([email])
+  @@index([bookingDate])
+  @@index([completedAt])
+}
+
+// Booking Analytics View (for fast statistics)
+model BookingStats {
+  id                   Int      @id @default(autoincrement())
+  statType             String   @map("stat_type") @db.VarChar(50) // 'cancelled' or 'completed'
+  statPeriod           String   @map("stat_period") @db.VarChar(20) // 'today', 'week', 'month', 'year', 'total'
+  statDate             DateTime @map("stat_date") @db.Date
+  count                Int      @default(0)
+  totalAmount          Decimal? @map("total_amount") @db.Decimal(12, 2)
+  lastUpdated          DateTime @default(now()) @updatedAt @map("last_updated")
+
+  @@map("booking_stats")
+  @@unique([statType, statPeriod, statDate])
+  @@index([statType])
+  @@index([statPeriod])
+  @@index([statDate])
+}

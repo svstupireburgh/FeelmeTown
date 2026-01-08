@@ -1,0 +1,128 @@
+{
+  "occasions": [
+    {
+      "id": "68e1d79f601d8e3f3fff0cc3",
+      "occasionId": "anniversary",
+      "name": "Anniversary",
+      "description": "",
+      "requiredFields": [
+        "wifeName",
+        "husbandName"
+      ],
+      "fieldLabels": {},
+      "isActive": true,
+      "category": "celebration",
+      "popular": false,
+      "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759635048/feelmetown/occasions/s6dgyp4mkmki4i2qprqu.jpg"
+    },
+    {
+      "id": "68e1e82c14f93e32033b03c8",
+      "occasionId": "OCC0NaN",
+      "name": "Baby Shower",
+      "description": "",
+      "requiredFields": [
+        "Nick name of Mon to be"
+      ],
+      "fieldLabels": {},
+      "isActive": true,
+      "category": "celebration",
+      "popular": false,
+      "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759635502/feelmetown/occasions/li5ibnha4t3dx3v5zsx9.jpg",
+      "createdAt": "2025-10-05T03:38:20.880Z"
+    },
+    {
+      "id": "68e1e89614f93e32033b03c9",
+      "occasionId": "OCC0NaN",
+      "name": "Birthday",
+      "description": "",
+      "requiredFields": [
+        "Nick Name of Bithday Person"
+      ],
+      "fieldLabels": {},
+      "isActive": true,
+      "category": "celebration",
+      "popular": false,
+      "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759635607/feelmetown/occasions/go3dhvosmpjbks0wztav.jpg",
+      "createdAt": "2025-10-05T03:40:06.216Z"
+    },
+    {
+      "id": "68e1e8bc14f93e32033b03ca",
+      "occasionId": "OCC0NaN",
+      "name": "Bride to be",
+      "description": "",
+      "requiredFields": [
+        "Nickname of Bride to be"
+      ],
+      "fieldLabels": {},
+      "isActive": true,
+      "category": "celebration",
+      "popular": false,
+      "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759635646/feelmetown/occasions/tvj3uytvqrw1iulnwgps.jpg",
+      "createdAt": "2025-10-05T03:40:44.449Z"
+    },
+    {
+      "id": "68e1e90414f93e32033b03cb",
+      "occasionId": "OCC0NaN",
+      "name": "Congratulations",
+      "description": "",
+      "requiredFields": [
+        "Nickname of Person"
+      ],
+      "fieldLabels": {},
+      "isActive": true,
+      "category": "celebration",
+      "popular": false,
+      "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759635717/feelmetown/occasions/xd3awdpgoodivoxhmwkm.jpg",
+      "createdAt": "2025-10-05T03:41:56.022Z"
+    },
+    {
+      "id": "68e1e92514f93e32033b03cc",
+      "occasionId": "OCC0NaN",
+      "name": "Farewell",
+      "description": "",
+      "requiredFields": [
+        "Nickname of Farewell Person"
+      ],
+      "fieldLabels": {},
+      "isActive": true,
+      "category": "celebration",
+      "popular": false,
+      "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759635750/feelmetown/occasions/sf2y99ivh0felk11vuxq.jpg",
+      "createdAt": "2025-10-05T03:42:29.086Z"
+    },
+    {
+      "id": "68e1e95f14f93e32033b03cd",
+      "occasionId": "OCC0NaN",
+      "name": "Marriage Proposal",
+      "description": "",
+      "requiredFields": [
+        "Your Nickname",
+        "Your Partner's Name"
+      ],
+      "fieldLabels": {},
+      "isActive": true,
+      "category": "celebration",
+      "popular": false,
+      "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759635809/feelmetown/occasions/ltjzf8emdftfya6fribh.jpg",
+      "createdAt": "2025-10-05T03:43:27.721Z"
+    },
+    {
+      "id": "68e1e98914f93e32033b03ce",
+      "occasionId": "OCC0NaN",
+      "name": "Romatic Date",
+      "description": "",
+      "requiredFields": [
+        "Your Nickname",
+        "Your Partner's Nickname"
+      ],
+      "fieldLabels": {},
+      "isActive": true,
+      "category": "celebration",
+      "popular": false,
+      "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759635850/feelmetown/occasions/gmitb5nploo22vzhyizf.jpg",
+      "createdAt": "2025-10-05T03:44:09.291Z"
+    }
+  ],
+  "lastUpdated": "2025-10-23T13:03:10.599Z",
+  "source": "database"
+}

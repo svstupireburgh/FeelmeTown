@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant Test - FeelME Town</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .chat-container {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .message {
+            margin: 10px 0;
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+        }
+        
+        .user-message {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            margin-left: auto;
+            text-align: right;
+        }
+        
+        .ai-message {
+            background: rgba(255, 255, 255, 0.2);
+            margin-right: auto;
+        }
+        
+        .input-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .message-input {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .message-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .send-btn {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .quick-tests {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .quick-test-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .quick-test-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+        
+        .typing-indicator {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 15px;
+            border-radius: 15px;
+            margin: 10px 0;
+            max-width: 80%;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 AI Assistant Test</h1>
+            <p>Test Enhanced AI with Theater Recommendations & Internet Search</p>
+        </div>
+        
+        <div class="quick-tests">
+            <button class="quick-test-btn" onclick="sendQuickMessage('Theater booking karna hai anniversary ke liye')">Anniversary Booking</button>
+            <button class="quick-test-btn" onclick="sendQuickMessage('Friends ke saath movie dekhna hai')">Friends Movie</button>
+            <button class="quick-test-btn" onclick="sendQuickMessage('Latest popular movies kya hain?')">Latest Movies</button>
+            <button class="quick-test-btn" onclick="sendQuickMessage('Budget mein theater options?')">Budget Options</button>
+            <button class="quick-test-btn" onclick="sendQuickMessage('Birthday celebration ideas?')">Birthday Ideas</button>
+            <button class="quick-test-btn" onclick="sendQuickMessage('Couples ke liye best theater?')">Couples Theater</button>
+        </div>
+        
+        <div id="chatContainer" class="chat-container">
+            <div class="ai-message">
+                <strong>Ankit:</strong> Heyy! 👋 Main Ankit hun, FeelME Town ka receptionist! Yaar, aaj kya plan hai? Theater booking karna hai kya? I'm super excited to help you! 😊✨
+            </div>
+        </div>
+        
+        <div class="input-container">
+            <input 
+                type="text" 
+                id="messageInput" 
+                class="message-input" 
+                placeholder="Type your message here..."
+                onkeypress="handleKeyPress(event)"
+            >
+            <button id="sendBtn" class="send-btn" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        let conversationHistory = [];
+        
+        function addMessage(text, isUser = false) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
+            messageDiv.innerHTML = isUser ? `<strong>You:</strong> ${text}` : `<strong>Ankit:</strong> ${text}`;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function showTypingIndicator() {
+            const chatContainer = document.getElementById('chatContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = '<strong>Ankit:</strong> Typing...';
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        async function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const message = messageInput.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            addMessage(message, true);
+            conversationHistory.push({ role: 'user', content: message });
+            
+            // Clear input and disable button
+            messageInput.value = '';
+            sendBtn.disabled = true;
+            showTypingIndicator();
+            
+            try {
+                const response = await fetch('/api/ai-assistant/stream', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: message,
+                        conversationHistory: conversationHistory
+                    })
+                });
+                
+                if (response.ok) {
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    let aiResponse = '';
+                    
+                    hideTypingIndicator();
+                    
+                    // Create AI message element
+                    const chatContainer = document.getElementById('chatContainer');
+                    const aiMessageDiv = document.createElement('div');
+                    aiMessageDiv.className = 'message ai-message';
+                    aiMessageDiv.innerHTML = '<strong>Ankit:</strong> ';
+                    chatContainer.appendChild(aiMessageDiv);
+                    
+                    // Stream the response
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
+                        
+                        const chunk = decoder.decode(value, { stream: true });
+                        aiResponse += chunk;
+                        aiMessageDiv.innerHTML = `<strong>Ankit:</strong> ${aiResponse}`;
+                        chatContainer.scrollTop = chatContainer.scrollHeight;
+                    }
+                    
+                    conversationHistory.push({ role: 'assistant', content: aiResponse });
+                } else {
+                    hideTypingIndicator();
+                    addMessage('Sorry yaar, thoda technical issue aa gaya. Try again kar sakte ho!');
+                }
+            } catch (error) {
+                hideTypingIndicator();
+                addMessage('Connection issue hai, please try again!');
+                console.error('Error:', error);
+            }
+            
+            sendBtn.disabled = false;
+        }
+        
+        function sendQuickMessage(message) {
+            document.getElementById('messageInput').value = message;
+            sendMessage();
+        }
+        
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>

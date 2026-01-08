@@ -1,0 +1,30 @@
+{
+  "gifts": [
+    {
+      "id": "cake1",
+      "name": "Chocolate Cake",
+      "description": "Delicious chocolate cake for celebrations",
+      "price": "₹500",
+      "category": "cakes",
+      "availability": true
+    },
+    {
+      "id": "flowers1",
+      "name": "Rose Bouquet",
+      "description": "Beautiful red roses bouquet",
+      "price": "₹300",
+      "category": "flowers",
+      "availability": true
+    },
+    {
+      "id": "decoration1",
+      "name": "Balloon Decoration",
+      "description": "Colorful balloon decoration setup",
+      "price": "₹800",
+      "category": "decorations",
+      "availability": true
+    }
+  ],
+  "lastUpdated": "2025-10-23T13:03:10.599Z",
+  "source": "database"
+}

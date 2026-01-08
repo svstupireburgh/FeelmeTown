@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Memory Dashboard - FeelME Town</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .dashboard {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .status-card {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .status-running { background: #2ecc71; }
+        .status-stopped { background: #e74c3c; }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn.success { background: linear-gradient(45deg, #2ecc71, #27ae60); }
+        .btn.warning { background: linear-gradient(45deg, #f39c12, #e67e22); }
+        .btn.info { background: linear-gradient(45deg, #3498db, #2980b9); }
+        
+        .log {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .data-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .data-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .data-count {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #feca57;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1>🧠 AI Memory Dashboard</h1>
+            <p>FeelME Town - Real-time Database Sync</p>
+        </div>
+        
+        <div class="status-card">
+            <h3>📊 Scheduler Status</h3>
+            <p>
+                <span id="statusIndicator" class="status-indicator status-stopped"></span>
+                <span id="statusText">Checking...</span>
+            </p>
+            <p><strong>Interval:</strong> <span id="intervalText">-</span></p>
+            <p><strong>Next Update:</strong> <span id="nextUpdateText">-</span></p>
+            <p><strong>Last Updated:</strong> <span id="lastUpdatedText">-</span></p>
+        </div>
+        
+        <div class="status-card">
+            <h3>🎮 Controls</h3>
+            <div class="controls">
+                <button class="btn success" onclick="startScheduler()">🚀 Start Scheduler</button>
+                <button class="btn warning" onclick="stopScheduler()">🛑 Stop Scheduler</button>
+                <button class="btn info" onclick="manualUpdate()">🔄 Manual Update</button>
+                <button class="btn" onclick="refreshStatus()">📊 Refresh Status</button>
+            </div>
+        </div>
+        
+        <div class="status-card">
+            <h3>📁 Data Overview</h3>
+            <div class="data-preview">
+                <div class="data-card">
+                    <div class="data-count" id="theatersCount">-</div>
+                    <div>Theaters</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-count" id="occasionsCount">-</div>
+                    <div>Occasions</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-count" id="servicesCount">-</div>
+                    <div>Services</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-count" id="faqCount">-</div>
+                    <div>FAQ Items</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="status-card">
+            <h3>📝 Activity Log</h3>
+            <div id="activityLog" class="log">
+                Dashboard initialized...<br>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function log(message) {
+            const logElement = document.getElementById('activityLog');
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.innerHTML += `[${timestamp}] ${message}<br>`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+        
+        async function apiCall(endpoint, method = 'GET', data = null) {
+            try {
+                const options = {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' }
+                };
+                
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+                
+                const response = await fetch(endpoint, options);
+                return await response.json();
+            } catch (error) {
+                log(`❌ API Error: ${error.message}`);
+                return { success: false, error: error.message };
+            }
+        }
+        
+        async function refreshStatus() {
+            log('🔄 Refreshing status...');
+            
+            // Get scheduler status
+            const schedulerStatus = await apiCall('/api/ai-memory/scheduler', 'POST', { action: 'status' });
+            
+            if (schedulerStatus.success) {
+                const indicator = document.getElementById('statusIndicator');
+                const statusText = document.getElementById('statusText');
+                const intervalText = document.getElementById('intervalText');
+                const nextUpdateText = document.getElementById('nextUpdateText');
+                
+                if (schedulerStatus.status === 'running') {
+                    indicator.className = 'status-indicator status-running';
+                    statusText.textContent = 'Running ✅';
+                } else {
+                    indicator.className = 'status-indicator status-stopped';
+                    statusText.textContent = 'Stopped ❌';
+                }
+                
+                intervalText.textContent = schedulerStatus.interval || 'None';
+                nextUpdateText.textContent = schedulerStatus.nextUpdate 
+                    ? new Date(schedulerStatus.nextUpdate).toLocaleString()
+                    : 'Not scheduled';
+                
+                log(`✅ Status: ${schedulerStatus.status}`);
+            }
+            
+            // Get data counts
+            const memoryData = await apiCall('/api/ai-memory/read');
+            if (memoryData.success) {
+                document.getElementById('theatersCount').textContent = memoryData.totalItems?.theaters || 0;
+                document.getElementById('occasionsCount').textContent = memoryData.totalItems?.occasions || 0;
+                document.getElementById('servicesCount').textContent = memoryData.totalItems?.services || 0;
+                document.getElementById('faqCount').textContent = memoryData.totalItems?.faq || 0;
+                
+                // Find latest update time
+                const files = memoryData.memory;
+                let latestUpdate = null;
+                for (const [key, value] of Object.entries(files)) {
+                    if (value.lastUpdated) {
+                        const updateTime = new Date(value.lastUpdated);
+                        if (!latestUpdate || updateTime > latestUpdate) {
+                            latestUpdate = updateTime;
+                        }
+                    }
+                }
+                
+                document.getElementById('lastUpdatedText').textContent = latestUpdate 
+                    ? latestUpdate.toLocaleString()
+                    : 'Never';
+                
+                log('✅ Data counts updated');
+            }
+        }
+        
+        async function startScheduler() {
+            log('🚀 Starting scheduler...');
+            const result = await apiCall('/api/ai-memory/scheduler', 'POST', { action: 'start' });
+            
+            if (result.success) {
+                log('✅ Scheduler started successfully');
+            } else {
+                log(`❌ Failed to start scheduler: ${result.message || result.error}`);
+            }
+            
+            refreshStatus();
+        }
+        
+        async function stopScheduler() {
+            log('🛑 Stopping scheduler...');
+            const result = await apiCall('/api/ai-memory/scheduler', 'POST', { action: 'stop' });
+            
+            if (result.success) {
+                log('✅ Scheduler stopped successfully');
+            } else {
+                log(`❌ Failed to stop scheduler: ${result.message || result.error}`);
+            }
+            
+            refreshStatus();
+        }
+        
+        async function manualUpdate() {
+            log('🔄 Triggering manual update...');
+            const result = await apiCall('/api/ai-memory/update', 'POST');
+            
+            if (result.success) {
+                log(`✅ Manual update completed: ${result.files.join(', ')}`);
+            } else {
+                log(`❌ Manual update failed: ${result.error}`);
+            }
+            
+            refreshStatus();
+        }
+        
+        // Initialize dashboard
+        log('🚀 Dashboard loaded');
+        refreshStatus();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(refreshStatus, 30000);
+    </script>
+</body>
+</html>

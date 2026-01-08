@@ -1,0 +1,54 @@
+{
+  "faq": [
+    {
+      "id": "booking-process",
+      "question": "How do I book a theater?",
+      "answer": "You can book through our website, call us, or WhatsApp us. Choose your theater, date, time, and complete the booking.",
+      "category": "booking"
+    },
+    {
+      "id": "cancellation",
+      "question": "What is the cancellation policy?",
+      "answer": "You can cancel up to 72 hours before your show time and get 80% refund. Cancellations within 72 hours are not eligible for refund.",
+      "category": "policy"
+    },
+    {
+      "id": "capacity",
+      "question": "How many people can each theater accommodate?",
+      "answer": "EROS (Couples): 2 people, PHILIA (Friends): 4-40 people, PRAGMA (Love): 4-8 people, STORGE (Family): 4-12 people.",
+      "category": "theaters"
+    },
+    {
+      "id": "timing",
+      "question": "What are the available time slots?",
+      "answer": "We have multiple time slots throughout the day from 9:00 AM to 10:30 PM. Exact slots vary by theater and date.",
+      "category": "timing"
+    },
+    {
+      "id": "payment",
+      "question": "What payment methods do you accept?",
+      "answer": "We accept cash, UPI, credit/debit cards, and online payments. Advance booking requires payment confirmation.",
+      "category": "payment"
+    },
+    {
+      "id": "food",
+      "question": "Can we bring outside food?",
+      "answer": "We have our own catering services. Outside food policies vary by theater. Please check with our staff.",
+      "category": "food"
+    },
+    {
+      "id": "decorations",
+      "question": "Do you provide decorations?",
+      "answer": "Yes! We offer various decoration packages for birthdays, anniversaries, proposals, and other celebrations.",
+      "category": "services"
+    },
+    {
+      "id": "location",
+      "question": "Where are you located?",
+      "answer": "We are located in Delhi, Dwarka. Contact us for exact address and directions.",
+      "category": "location"
+    }
+  ],
+  "lastUpdated": "2025-10-23T13:03:10.599Z",
+  "source": "database"
+}

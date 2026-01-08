@@ -1,0 +1,218 @@
+{
+  "services": [
+    {
+      "id": "68dba83727310123a5350a9d",
+      "serviceId": "SRV0001",
+      "name": "Food & Beverages",
+      "description": "",
+      "items": [
+        {
+          "id": "ITEM1759227954891",
+          "name": "Black Forest Half Kg",
+          "price": 550,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759227954/feelmetown/services/phu1wons1zfttjxfvuuq.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759227970938",
+          "name": "Blueberry Half Kg",
+          "price": 800,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759227970/feelmetown/services/sez7igalukqefglrd052.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228011068",
+          "name": "Butterscotch Half Kg",
+          "price": 650,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228010/feelmetown/services/mogmmz5pfw62algztevo.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228026740",
+          "name": "Choco Brownie Half Kg",
+          "price": 750,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228026/feelmetown/services/fckbqaia7rr2308o4dhv.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228040147",
+          "name": "Chocolate chocochip Half Kg",
+          "price": 750,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228040/feelmetown/services/ggq366hp47mvlkikkn6j.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228057239",
+          "name": "Chocolate Oreo Half Kg",
+          "price": 750,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228057/feelmetown/services/jmy90xdphpehdxkmogfn.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228072818",
+          "name": "Chocolate truffle Half Kg",
+          "price": 650,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228072/feelmetown/services/paus8htywyevnz0wgr1l.webp",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228088017",
+          "name": "pain apple",
+          "price": 650,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228087/feelmetown/services/x8f04qp23h81nf5zxhsx.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228100214",
+          "name": "Rasmalai cake Half Kg",
+          "price": 800,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228099/feelmetown/services/ou5vtkm7rup5thkzt0yw.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228114401",
+          "name": "Red Velvet Half Kg",
+          "price": 750,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228113/feelmetown/services/agcwu4xxvyssmdpebvgo.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228134928",
+          "name": "Strawberry Half Kg",
+          "price": 550,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228134/feelmetown/services/dyv6czmdqpyfjgtied07.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228150260",
+          "name": "White forest",
+          "price": 600,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228149/feelmetown/services/pwk6i7xo25ubok90e83g.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228172842",
+          "name": "Vanilla",
+          "price": 550,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228172/feelmetown/services/y2rx3jmsoilvkm9po6uq.jpg",
+          "description": ""
+        }
+      ],
+      "isActive": true,
+      "createdAt": "2025-09-30T09:51:51.205Z"
+    },
+    {
+      "id": "68dba84527310123a5350a9e",
+      "serviceId": "SRV0002",
+      "name": "Gifts",
+      "description": "",
+      "items": [
+        {
+          "id": "ITEM1759228412096",
+          "name": "Big Teddy",
+          "price": 160,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228411/feelmetown/services/wzsnfjfudhqds3nfxlqs.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228432672",
+          "name": "Flower bouquet",
+          "price": 450,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228432/feelmetown/services/y9obqmd9lycsa7tybibr.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228455965",
+          "name": "Premium rose boquet",
+          "price": 650,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228455/feelmetown/services/p7k7or9ffkihwjptxirv.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228475160",
+          "name": "Rose Bouquet",
+          "price": 550,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228474/feelmetown/services/c04nnihfqu1l42smwz51.png",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228487638",
+          "name": "Small Heart Pillow",
+          "price": 250,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228487/feelmetown/services/msue8ba9jj9xwohhpmuo.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228503652",
+          "name": "Small rose bouquet",
+          "price": 250,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228502/feelmetown/services/cvvunscjg6xd9wp4ei38.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228519024",
+          "name": "Small Teddy Bear",
+          "price": 120,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228518/feelmetown/services/rpw3fbqfo7ixxtle6nnn.jpg",
+          "description": ""
+        }
+      ],
+      "isActive": true,
+      "createdAt": "2025-09-30T09:52:05.586Z"
+    },
+    {
+      "id": "68dba84f27310123a5350a9f",
+      "serviceId": "SRV0003",
+      "name": "Patry Places",
+      "description": "",
+      "items": [
+        {
+          "id": "ITEM1759228270877",
+          "name": "Candle Path",
+          "price": 250,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228270/feelmetown/services/yi6csukcrvvuwzwbka9m.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228290266",
+          "name": "Deluxe Fog Entry",
+          "price": 450,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228289/feelmetown/services/ml7lnb8ze9mtkjxssvee.png",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228308257",
+          "name": "LED Numbers",
+          "price": 100,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228307/feelmetown/services/yos63e2kdl7pf7avdfne.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228325322",
+          "name": "LUXE Fog Entry",
+          "price": 800,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228325/feelmetown/services/cp7rpnznnbdop806f8gl.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228342938",
+          "name": "Rose Heart& Rose Petals",
+          "price": 150,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228342/feelmetown/services/jdxuesdffneb7eeajq3o.jpg",
+          "description": ""
+        },
+        {
+          "id": "ITEM1759228362256",
+          "name": "Super LUXE Fog Entry",
+          "price": 1200,
+          "imageUrl": "https://res.cloudinary.com/dr8razrcd/image/upload/v1759228361/feelmetown/services/qsw22enlickwwl9iq3xp.jpg",
+          "description": ""
+        }
+      ],
+      "isActive": true,
+      "createdAt": "2025-09-30T09:52:15.848Z"
+    }
+  ],
+  "lastUpdated": "2025-10-23T13:03:10.599Z",
+  "source": "database"
+}
