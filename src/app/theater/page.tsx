@@ -413,10 +413,9 @@ function TheaterInner() {
 
 
                     // Get all incomplete bookings with retry mechanism
-                    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
                     const controller = new AbortController();
                     const timeoutId = window.setTimeout(() => controller.abort(), 10000);
-                    const response = await fetch(`${baseUrl}/api/incomplete-booking`, {
+                    const response = await fetch(`/api/incomplete-booking`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
@@ -545,26 +544,21 @@ function TheaterInner() {
 
             // Mark as fetched to prevent duplicate requests
             setFetchedCancelBookingIds(prev => new Set(prev).add(cancelBookingId));
+
             // Fetch booking data and open cancel popup
             setTimeout(async () => {
                 try {
-
-
-                    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
-                    const response = await fetch(`${baseUrl}/api/booking/${cancelBookingId}?email=${encodeURIComponent(email)}`);
+                    const response = await fetch(`/api/booking/${cancelBookingId}?email=${encodeURIComponent(email)}`);
                     const result = await response.json();
 
                     if (result.success && result.booking) {
-
                         // Open cancel booking popup with the fetched data
                         openCancelBookingPopup(result.booking);
                     } else {
-
                         // Open cancel booking popup with null data to show "booking not found" message
                         openCancelBookingPopup(null);
                     }
                 } catch (error) {
-
                     // Open cancel booking popup with null data to show "booking not found" message
                     openCancelBookingPopup(null);
                 }
@@ -2138,6 +2132,14 @@ function TheaterInner() {
                     justify-content: center;
                 }
 
+                @media (max-width: 767px) {
+                    .filter-dropdowns {
+                        flex-wrap: nowrap;
+                        gap: 0.75rem;
+                        align-items: flex-end;
+                    }
+                }
+
                 @media (min-width: 768px) {
                     .filter-dropdowns {
                         justify-content: flex-end;
@@ -2149,6 +2151,13 @@ function TheaterInner() {
                     flex-direction: column;
                     gap: 0.5rem;
                     min-width: 150px;
+                }
+
+                @media (max-width: 767px) {
+                    .dropdown-group {
+                        min-width: 0;
+                        flex: 1;
+                    }
                 }
 
                 .dropdown-label {
@@ -2187,6 +2196,16 @@ function TheaterInner() {
                         inset 0 1px 0 rgba(255, 255, 255, 0.1);
                     position: relative;
                     overflow: hidden;
+                }
+
+                @media (max-width: 767px) {
+                    .filter-dropdown {
+                        width: 100%;
+                        padding: 1.05rem 1.1rem;
+                        padding-right: 3rem;
+                        background-position: right 1rem center;
+                        background-size: 1.25rem;
+                    }
                 }
 
 
@@ -2232,19 +2251,19 @@ function TheaterInner() {
 
                 /* Theater Selection Section */
                 .theater-selection-section {
-                    padding: 3rem 0;
+                    padding: 0rem 0;
                     background: transparent;
                 }
 
                 @media (min-width: 768px) {
                     .theater-selection-section {
-                        padding: 4rem 0;
+                        padding: 0rem 0;
                     }
                 }
 
                 @media (min-width: 1024px) {
                     .theater-selection-section {
-                        padding: 5rem 0;
+                        padding: 0rem 0;
                     }
                 }
 
@@ -2254,12 +2273,25 @@ function TheaterInner() {
                     margin-bottom: 3rem;
                 }
 
+                @media (max-width: 767px) {
+                    .selection-header {
+                        margin-bottom: 1.5rem;
+                    }
+                }
+
                 .selection-title {
                     font-size: 2.5rem;
                     font-weight: bold;
                     color: #ffffff;
                     margin-bottom: 1rem;
                     font-family: 'Paralucent-DemiBold', Arial, Helvetica, sans-serif;
+                }
+
+                @media (max-width: 767px) {
+                    .selection-title {
+                        font-size: 1.9rem;
+                        margin-bottom: 0.75rem;
+                    }
                 }
 
                 @media (min-width: 768px) {
@@ -2273,6 +2305,13 @@ function TheaterInner() {
                     color: #d1d5db;
                     margin-bottom: 2rem;
                     font-family: 'Paralucent-Medium', Arial, Helvetica, sans-serif;
+                }
+
+                @media (max-width: 767px) {
+                    .selection-subtitle {
+                        font-size: 0.95rem;
+                        margin-bottom: 1.25rem;
+                    }
                 }
 
                 .selection-divider {

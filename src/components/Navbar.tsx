@@ -147,6 +147,8 @@ const Navbar = () => {
   const handleLogoClick = () => {
     const currentTime = Date.now();
 
+    const nextClickCount = currentTime - lastLogoClickTime > 3000 ? 1 : logoClickCount + 1;
+
     // Reset counter if more than 3 seconds have passed since last click
     if (currentTime - lastLogoClickTime > 3000) {
       setLogoClickCount(1);
@@ -157,7 +159,7 @@ const Navbar = () => {
     setLastLogoClickTime(currentTime);
 
     // If 5 clicks within 3 seconds, open role chooser / redirect
-    if (logoClickCount >= 4) { // 4 because we just incremented
+    if (nextClickCount >= 5) {
       setLogoClickCount(0); // Reset counter
 
       // Check existing sessions
@@ -185,7 +187,11 @@ const Navbar = () => {
         // On any error, just show the popup
         setShowAdminStaffPopup(true);
       }
+
+      return;
     }
+
+    router.push('/');
   };
 
   const handleSelectAdmin = () => {

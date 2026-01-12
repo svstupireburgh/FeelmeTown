@@ -1994,12 +1994,32 @@ export default function BookingPopup({ isOpen, onClose, isManualMode = false, on
   const [availableCoupons, setAvailableCoupons] = useState<CouponInfo[]>([]);
   const [couponsLoading, setCouponsLoading] = useState(false);
   const [couponsError, setCouponsError] = useState<string | null>(null);
+  const [showAvailableCoupons, setShowAvailableCoupons] = useState(false);
+  const availableCouponsRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!isCouponEligible && appliedDiscount > 0) {
       resetCouponState();
     }
   }, [isCouponEligible, appliedDiscount]);
+
+  useEffect(() => {
+    if (!isCouponEligible || appliedCouponCode) {
+      setShowAvailableCoupons(false);
+    }
+  }, [isCouponEligible, appliedCouponCode]);
+
+  useEffect(() => {
+    const onMouseDown = (e: MouseEvent) => {
+      if (!availableCouponsRef.current) return;
+      if (!availableCouponsRef.current.contains(e.target as Node)) {
+        setShowAvailableCoupons(false);
+      }
+    };
+
+    document.addEventListener('mousedown', onMouseDown);
+    return () => document.removeEventListener('mousedown', onMouseDown);
+  }, []);
 
   useEffect(() => {
     let abortController: AbortController | null = null;
@@ -2716,11 +2736,18 @@ export default function BookingPopup({ isOpen, onClose, isManualMode = false, on
     setShowCloseConfirmation(true);
   };
 
-  const handleCloseButtonClick = () => {
+  const handleBackButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (goToPreviousTabOrExit()) {
       return;
     }
 
+    void handleClose();
+  };
+
+  const handleCloseButtonClick = () => {
     // Prevent multiple confirmation popups
     if (isClosing || showCloseConfirmation) {
       return;
@@ -2930,7 +2957,7 @@ export default function BookingPopup({ isOpen, onClose, isManualMode = false, on
         {/* Header */}
         <div className="booking-popup-header">
           <div className="booking-popup-nav">
-            <button className="booking-popup-back-btn" onClick={handleClose}>
+            <button type="button" className="booking-popup-back-btn" onClick={handleBackButtonClick}>
               <ArrowLeft className="w-5 h-5" />
               <span className="booking-popup-back-text">Back</span>
             </button>
@@ -3596,25 +3623,123 @@ export default function BookingPopup({ isOpen, onClose, isManualMode = false, on
                         <h4 className="booking-popup-terms-title">Coupon Code</h4>
                         <div className="booking-popup-terms-content">
                           {!appliedCouponCode && (
-                            <div className="booking-popup-coupon-row">
-                              <input
-                                type="text"
-                                value={couponCode}
-                                onChange={(e) => setCouponCode(e.target.value)}
-                                placeholder="Enter coupon code"
-                                className="booking-popup-input"
-                                style={{ flex: 1 }}
-                                disabled={!isCouponEligible}
-                              />
-                              <button
-                                onClick={() => void applyCoupon()}
-                                disabled={!isCouponEligible || couponApplying || !couponCode.trim()}
-                                className="booking-popup-btn"
-                                style={{ padding: '10px 16px' }}
+                            <>
+                              <div className="booking-popup-coupon-row">
+                                <input
+                                  type="text"
+                                  value={couponCode}
+                                  onChange={(e) => setCouponCode(e.target.value)}
+                                  placeholder="Enter coupon code"
+                                  className="booking-popup-input"
+                                  style={{ flex: 1 }}
+                                  disabled={!isCouponEligible}
+                                />
+                              </div>
+
+                              <div
+                                ref={availableCouponsRef}
+                                style={{ marginTop: 10, display: 'flex', gap: 10, flexWrap: 'wrap' }}
                               >
-                                {couponApplying ? 'Applying...' : 'Apply'}
-                              </button>
-                            </div>
+                                <button
+                                  type="button"
+                                  onClick={() => void applyCoupon()}
+                                  disabled={!isCouponEligible || couponApplying || !couponCode.trim()}
+                                  className="booking-popup-btn"
+                                  style={{ padding: '10px 16px' }}
+                                >
+                                  {couponApplying ? 'Applying...' : 'Apply'}
+                                </button>
+
+                                <button
+                                  type="button"
+                                  className="booking-popup-btn"
+                                  style={{
+                                    padding: '10px 16px',
+                                    opacity: isCouponEligible ? 1 : 0.6,
+                                    cursor: isCouponEligible ? 'pointer' : 'not-allowed',
+                                  }}
+                                  disabled={!isCouponEligible}
+                                  onClick={() => setShowAvailableCoupons((v) => !v)}
+                                >
+                                  Show Available Coupon
+                                </button>
+
+                                {showAvailableCoupons && (
+                                  <div
+                                    style={{
+                                      marginTop: 10,
+                                      width: '100%',
+                                      border: '1px solid rgba(255, 255, 255, 0.12)',
+                                      background: 'rgba(0, 0, 0, 0.35)',
+                                      borderRadius: 12,
+                                      padding: 10,
+                                      maxHeight: 220,
+                                      overflow: 'auto',
+                                    }}
+                                  >
+                                    {couponsLoading && (
+                                      <div style={{ color: 'rgba(255,255,255,0.75)', fontSize: 14 }}>
+                                        Loading coupons...
+                                      </div>
+                                    )}
+
+                                    {!couponsLoading && couponsError && (
+                                      <div style={{ color: '#ff6b6b', fontSize: 14 }}>{couponsError}</div>
+                                    )}
+
+                                    {!couponsLoading && !couponsError && availableCoupons.length === 0 && (
+                                      <div style={{ color: 'rgba(255,255,255,0.75)', fontSize: 14 }}>
+                                        No active coupons available.
+                                      </div>
+                                    )}
+
+                                    {!couponsLoading && !couponsError && availableCoupons.length > 0 && (
+                                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                        {availableCoupons.map((coupon) => (
+                                          <div
+                                            key={coupon.couponCode}
+                                            style={{
+                                              display: 'flex',
+                                              alignItems: 'center',
+                                              justifyContent: 'space-between',
+                                              gap: 10,
+                                              padding: '10px 12px',
+                                              borderRadius: 10,
+                                              border: '1px solid rgba(255, 255, 255, 0.14)',
+                                              background: 'rgba(255, 255, 255, 0.06)',
+                                              color: '#fff',
+                                            }}
+                                          >
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                                              <span style={{ fontWeight: 700, letterSpacing: '0.08em' }}>
+                                                {coupon.couponCode}
+                                              </span>
+                                              <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>
+                                                {describeCouponDiscount(coupon)}
+                                              </span>
+                                            </div>
+
+                                            <button
+                                              type="button"
+                                              className="booking-popup-btn"
+                                              style={{ padding: '6px 10px' }}
+                                              onClick={() => {
+                                                const code = String(coupon.couponCode || '').trim().toUpperCase();
+                                                setCouponCode(code);
+                                                setShowAvailableCoupons(false);
+                                                void applyCoupon(code);
+                                              }}
+                                            >
+                                              Apply
+                                            </button>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            </>
                           )}
 
                           {appliedCouponCode && appliedDiscount > 0 && (

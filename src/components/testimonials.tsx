@@ -635,13 +635,13 @@ const TestimonialPage = () => {
           </>
         )}
       </div>
-      <GoogleReviews />
-      {/* Call to Action Section */}
-      <div style={styles.ctaSection}>
-        {/* Shimmer Effect */}
+     
+      
+      {/* <div style={styles.ctaSection}>
+       
         <div style={styles.ctaSectionShimmer}></div>
         
-        {/* Red Ball that follows mouse smoothly */}
+        
         <div 
           ref={ballRef}
           style={styles.redBall}
@@ -664,9 +664,9 @@ const TestimonialPage = () => {
             Contact Us
           </button>
         </div>
-      </div>
+      </div> */}
 
-      {/* Contact Popup */}
+      
       {showContactPopup && <ContactPopup />}
 
     </div>
@@ -726,7 +726,7 @@ const styles = {
   testimonialsContainer: {
     position: 'relative' as const,
     overflow: 'hidden',
-    padding: '2rem 0',
+    padding: '0rem 0',
   },
   scrollRow: {
     marginBottom: '2rem',

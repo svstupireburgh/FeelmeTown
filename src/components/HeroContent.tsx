@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface GalleryImage {
@@ -11,6 +11,15 @@ interface GalleryImage {
   isActive: boolean;
 }
 
+type CouponInfo = {
+  couponCode: string;
+  discountType: 'percentage' | 'fixed';
+  discountValue: number;
+  usageLimit?: number | null;
+  validDate?: string | Date | null;
+  expireDate?: string | Date | null;
+};
+
 const HeroContent = () => {
   const router = useRouter();
   
@@ -21,6 +30,13 @@ const HeroContent = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slides, setSlides] = useState<GalleryImage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [availableCoupons, setAvailableCoupons] = useState<CouponInfo[]>([]);
+  const [couponsLoading, setCouponsLoading] = useState(false);
+  const [couponsError, setCouponsError] = useState<string | null>(null);
+  const [showAvailableCoupons, setShowAvailableCoupons] = useState(false);
+  const availableCouponsRef = useRef<HTMLDivElement | null>(null);
+  const [copiedCouponCode, setCopiedCouponCode] = useState<string | null>(null);
 
   // Fetch gallery images from database
   useEffect(() => {
@@ -70,6 +86,76 @@ const HeroContent = () => {
       return () => clearInterval(interval);
     }
   }, [slides.length]);
+
+  useEffect(() => {
+    let abortController: AbortController | null = null;
+    const fetchCoupons = async () => {
+      try {
+        setCouponsLoading(true);
+        setCouponsError(null);
+        abortController = new AbortController();
+        const resp = await fetch('/api/coupons', { signal: abortController.signal });
+        const data = await resp.json();
+        if (data.success && Array.isArray(data.coupons)) {
+          setAvailableCoupons(data.coupons);
+        } else {
+          setAvailableCoupons([]);
+          setCouponsError(data.error || 'Unable to load coupons');
+        }
+      } catch (error) {
+        if ((error as DOMException).name === 'AbortError') return;
+        setCouponsError('Unable to load coupons');
+        setAvailableCoupons([]);
+      } finally {
+        setCouponsLoading(false);
+      }
+    };
+
+    void fetchCoupons();
+
+    return () => {
+      abortController?.abort();
+    };
+  }, []);
+
+  useEffect(() => {
+    const onMouseDown = (e: MouseEvent) => {
+      if (!availableCouponsRef.current) return;
+      if (!availableCouponsRef.current.contains(e.target as Node)) {
+        setShowAvailableCoupons(false);
+      }
+    };
+
+    document.addEventListener('mousedown', onMouseDown);
+    return () => document.removeEventListener('mousedown', onMouseDown);
+  }, []);
+
+  const describeCouponDiscount = (coupon: CouponInfo) => {
+    return coupon.discountType === 'percentage'
+      ? `${coupon.discountValue}% off`
+      : `₹${coupon.discountValue} off`;
+  };
+
+  const applyHeroCoupon = async (code: string) => {
+    const coupon = String(code || '').trim().toUpperCase();
+    if (!coupon) return;
+    try {
+      await navigator.clipboard?.writeText?.(coupon);
+    } catch (e) {
+      const el = document.createElement('textarea');
+      el.value = coupon;
+      el.style.position = 'fixed';
+      el.style.opacity = '0';
+      document.body.appendChild(el);
+      el.focus();
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+    }
+    setCopiedCouponCode(coupon);
+    window.setTimeout(() => setCopiedCouponCode(null), 1200);
+  };
+
   return (
     <div className="hero-container">
               <div className="hero-content">
@@ -98,7 +184,7 @@ const HeroContent = () => {
       <div className="widgets-container">
         <div className="widget left-widget">
           <div className="widget-header">
-            <div className="widget-logo">FT</div>
+            <div className="widget-logo">FMT</div>
             <div className="widget-icons">
               <span>🎬</span>
               <span>⭐</span>
@@ -149,7 +235,57 @@ const HeroContent = () => {
         </div>
         
         <div className="widget right-widget">
-          <div className="metric">
+          <div className="metric coupon-metric" ref={availableCouponsRef}>
+            <div className="metric-header">
+              <span>Promo Code</span>
+              <button
+                type="button"
+                className="coupon-trigger"
+                onClick={() => setShowAvailableCoupons((v) => !v)}
+              >
+                Show Available Promo Code
+              </button>
+            </div>
+
+            {showAvailableCoupons && (
+              <div className="coupon-dropdown">
+                {couponsLoading && (
+                  <div className="coupon-dropdown-msg">Loading coupons...</div>
+                )}
+
+                {!couponsLoading && couponsError && (
+                  <div className="coupon-dropdown-error">{couponsError}</div>
+                )}
+
+                {!couponsLoading && !couponsError && availableCoupons.length === 0 && (
+                  <div className="coupon-dropdown-msg">No active coupons available.</div>
+                )}
+
+                {!couponsLoading && !couponsError && availableCoupons.length > 0 && (
+                  <div className="coupon-list">
+                    {availableCoupons.map((coupon) => (
+                      <div key={coupon.couponCode} className="coupon-row">
+                        <div className="coupon-row-left">
+                          <div className="coupon-code">{coupon.couponCode}</div>
+                          <div className="coupon-discount">{describeCouponDiscount(coupon)}</div>
+                        </div>
+                        <button
+                          type="button"
+                          className="coupon-apply-btn"
+                          onClick={() => void applyHeroCoupon(coupon.couponCode)}
+                        >
+                          {copiedCouponCode === String(coupon.couponCode || '').trim().toUpperCase()
+                            ? 'Copied'
+                            : 'Copy'}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+          <div className="metric metric-hide-mobile">
             <div className="metric-header">
               <span>Shows Available</span>
               <span className="info-icon">i</span>
@@ -159,8 +295,7 @@ const HeroContent = () => {
               <div className="progress-bar green"></div>
             </div>
           </div>
-          
-          <div className="metric">
+          <div className="metric metric-hide-mobile">
             <div className="metric-header">
               <span>Customer Satisfaction</span>
               <span className="info-icon">i</span>
@@ -171,7 +306,7 @@ const HeroContent = () => {
             </div>
           </div>
 
-          <div className="metric">
+          <div className="metric metric-hide-mobile">
             <div className="metric-header">
               <span>Premium Bookings</span>
               <span className="info-icon">i</span>
@@ -198,6 +333,12 @@ const HeroContent = () => {
           justify-content: center;
           padding: 2rem;
           overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+          .metric-hide-mobile {
+            display: none;
+          }
         }
 
         .hero-container::before {
@@ -505,13 +646,99 @@ const HeroContent = () => {
         .right-widget {
           height: 250px;
         }
+
+        .coupon-metric {
+          position: relative;
+        }
+
+        .coupon-trigger {
+          border: none;
+          background: rgba(0, 0, 0, 0.08);
+          padding: 6px 10px;
+          border-radius: 10px;
+          cursor: pointer;
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: #111;
+        }
+
+        .coupon-dropdown {
+          position: absolute;
+          bottom: calc(100% + 10px);
+          left: 0;
+          right: 0;
+          z-index: 999;
+          background: rgba(255, 255, 255, 0.98);
+          border: 1px solid rgba(0, 0, 0, 0.12);
+          border-radius: 12px;
+          padding: 10px;
+          box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+          max-height: 240px;
+          overflow: auto;
+        }
+
+        .coupon-dropdown-msg {
+          color: rgba(0, 0, 0, 0.7);
+          font-size: 14px;
+        }
+
+        .coupon-dropdown-error {
+          color: #ff3b3b;
+          font-size: 14px;
+        }
+
+        .coupon-list {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .coupon-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          padding: 10px 12px;
+          border-radius: 10px;
+          border: 1px solid rgba(0, 0, 0, 0.08);
+          background: rgba(0, 0, 0, 0.03);
+        }
+
+        .coupon-row-left {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .coupon-code {
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          color: #111;
+          font-size: 0.9rem;
+        }
+
+        .coupon-discount {
+          color: rgba(0, 0, 0, 0.65);
+          font-size: 0.85rem;
+        }
+
+        .coupon-apply-btn {
+          border: none;
+          background: #000;
+          color: #fff;
+          border-radius: 10px;
+          padding: 6px 10px;
+          cursor: pointer;
+          font-weight: 700;
+          font-size: 0.85rem;
+        }
         
 
         .widget-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 1rem;
+          margin-bottom: 0rem;
         }
 
         .widget-logo {
@@ -528,7 +755,7 @@ const HeroContent = () => {
 
         .widget-title {
           color: #333;
-          font-weight: 600;
+          font-weight: 300;
           margin-bottom: 1rem;
         }
 
@@ -826,6 +1053,11 @@ const HeroContent = () => {
         }
         
         @media (max-width: 768px) {
+          .hero-container {
+            min-height: auto;
+            padding: 1.5rem 1rem;
+          }
+
           .hero-content {
             margin-top: 3rem;
             padding: 0 1rem;
@@ -849,25 +1081,37 @@ const HeroContent = () => {
             position: relative;
             bottom: auto;
             right: auto;
-            margin-top: 2rem;
-            flex-direction: row;
+            margin-top: 1rem;
+            flex-direction: column;
             gap: 0.8rem;
             justify-content: center;
             align-items: center;
             width: 100%;
             display: flex;
           }
+
+          .right-widget {
+            order: 1;
+          }
+
+          .left-widget {
+            order: 2;
+          }
           
           .widget {
             min-width: 220px;
-            height: 220px;
+            height: auto;
             padding: 0.8rem;
+          }
+
+          .widget-title {
+            margin-bottom: 0.5rem;
           }
           
           .cta-container {
             display: flex;
             justify-content: center;
-            margin: 2rem auto;
+            margin: 1.5rem auto;
             width: 180px;
             height: 45px;
           }
@@ -906,11 +1150,11 @@ const HeroContent = () => {
           }
           
           .left-widget {
-            height: 220px;
+            height: auto;
           }
 
           .right-widget {
-            height: 220px;
+            height: auto;
           }
           
           
@@ -985,7 +1229,7 @@ const HeroContent = () => {
           .cta-container {
             display: flex;
             justify-content: center;
-            margin: 2rem auto;
+            margin: 1.5rem auto;
             width: 160px;
             height: 40px;
           }

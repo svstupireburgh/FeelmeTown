@@ -8,7 +8,6 @@ import TrustedBy from "../components/ui/TrustedBy";
 import Portfolio from "../components/Portfolio";
 import MoviesSection from "../components/MoviesSection";
 import TestimonialPage from "../components/testimonials";
-import GoogleReviews from "../components/GoogleReviews";
 import Footer from "../components/Footer";
 import FloatingNavigation from "../components/FloatingNavigation";
 import FAQ from "../components/FAQ";
@@ -58,9 +57,11 @@ export default function Home() {
       <div id="testimonials">
         <TestimonialPage />
       </div>
+      <script src="https://elfsightcdn.com/platform.js" async></script>
+      <div style={{ padding: '2rem' }}>
+        <div className="elfsight-app-02be31e2-4629-41fc-94ff-bd0f18ca4f6b" data-elfsight-app-lazy></div>
+      </div>
       <FAQ />
-      
-      
     </div>
   );
 }
